@@ -1,0 +1,23 @@
+{
+    "nature": {
+        "secret_phrase": "Northern Lights"
+    },
+    "mythology": {
+        "secret_phrase": "Athena Parthenos"
+    },
+    "star_wars": {
+        "secret_phrase": "That's no moon"
+    },
+    "batman": {
+        "secret_phrase": "I am the night, I am vengeance, I AM BATMAN!"
+    },
+    "marvel": {
+        "secret_phrase": "Avengers Assemble!"
+    },
+    "transformers": {
+        "secret_phrase": "More Than Meets the Eye"
+    },
+    "pirates": {
+        "secret_phrase": "Batten down the hatches and set sail!"
+    }
+}
