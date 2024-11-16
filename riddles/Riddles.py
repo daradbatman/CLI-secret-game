@@ -15,7 +15,7 @@ riddles = {
     ],
     "star wars": [
         {"question": "Though I am small, my power is great. I can lift starships with my mind. Who am I?", "answer": "yoda"},
-        {"question": "I am An elegant weapon for a more civilized age", "answer": "lightsaber"},
+        {"question": "I am An elegant weapon for a more civilized age", "answer": "light saber"},
         {"question": ""},
         {},
         {}
