@@ -1,5 +1,9 @@
 import random as random
 
+'''
+As a player correctly answers riddles, they will reveal parts of the secret phrase.
+The phrase revealer also checks if the players final answer is correct.
+'''
 
 class PhraseRevealer:
     def __init__(self, secretPhrase):

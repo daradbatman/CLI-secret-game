@@ -3,8 +3,10 @@ from game.PhraseRevealer import PhraseRevealer
 import os
 import json
 
+# TODO: break out getting user input
+# TODO: break out solving riddles
 
-def startGame():
+def runGame():
     # Load topics
     topics = loadThemes()
 
@@ -13,8 +15,8 @@ def startGame():
     while topic not in topics:
         print("Available topics:")
         for topic in topics.keys():
-            print(f"- {topic.capitalize()}")
-        topic = input("Choose a topic: ").strip().lower()
+            print(f"- {topic.capitalize().replace('_',' ')}")
+        topic = input("Choose a topic: ").strip().lower().replace(' ', '_')
         if topic not in topics:
             print("Invalid topic.")
 
@@ -44,6 +46,7 @@ def startGame():
 
         if attempts == 0:
             print("No more attempts for this riddle.")
+            print(f"The correct answer was {riddle['answer'].strip().upper()}")
 
     # Guess the secret phrase
     print("All riddles solved! Now, guess the secret phrase.")
@@ -54,7 +57,7 @@ def startGame():
             print("Congratulations, you've won!")
             return
         else:
-            guessCount = guessCount - 1
+            guessCount -= 1
             print(f"Incorrect guess {guessCount} guesses left.")
 
     print("Game Over. The secret phrase was:", phraseRevealer.secretPhrase)
