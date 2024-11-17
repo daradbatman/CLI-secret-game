@@ -3,6 +3,9 @@ from game.PhraseRevealer import PhraseRevealer
 import os
 import json
 
+# TODO: add option to play again
+# TODO: add timer for speed guessing
+
 def runGame():
     # Load topics
     topics = loadThemes()
