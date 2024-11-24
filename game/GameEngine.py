@@ -2,43 +2,56 @@ from game.RiddleManager import RiddleManager
 from game.PhraseRevealer import PhraseRevealer
 import os
 import json
-
-# TODO: add option to play again
-# TODO: add timer for speed guessing
+import time
 
 def runGame():
-    # Load topics
-    topics = loadThemes()
+    while True:
+        # Load topics
+        topics = loadThemes()
 
-    # Choose a topic
-    topic = getValidTopicInput(topics)
+        # Choose a topic
+        topic = getValidTopicInput(topics)
 
-    # Initialize the game components
-    riddleManager = RiddleManager(topic)
-    phraseRevealer = PhraseRevealer(topics[topic]["secret_phrase"])
+        # Initialize the game components
+        riddleManager = RiddleManager(topic)
+        phraseRevealer = PhraseRevealer(topics[topic]["secret_phrase"])
 
-    # Solve 5 riddles
-    for _ in range(5):
-        riddle = riddleManager.getNextRiddle()
-        if not riddle:
+        startTime = time.time()
+
+        # Solve 5 riddles
+        for _ in range(5):
+            riddle = riddleManager.getNextRiddle()
+            if not riddle:
+                break
+
+            if not solveRiddle(riddle, riddleManager, phraseRevealer):
+                break
+
+        # Guess the secret phrase
+        print("All riddles answered! Now, guess the secret phrase.")
+        guessCount = 5
+        while guessCount > 0:
+            guess = input("Your guess: ").strip().lower()
+            if phraseRevealer.checkPhrase(guess):
+                endTime = time.time()
+                elapsedTime = endTime - startTime
+                print("Congratulations, you've won!")
+                print(f"It took you {elapsedTime:.2f} seconds to guess the secret phrase.")
+
+                playerName = input("Enter your name for the leaderboard: ").strip()
+                saveLeaderBoard(playerName, elapsedTime)
+                break
+            else:
+                guessCount -= 1
+                print(f"Incorrect guess {guessCount} guesses left.")
+
+        if guessCount == 0:
+            print("Game Over. The secret phrase was:", phraseRevealer.secretPhrase)
+
+        playAgain = input("Would you like to play again? (yes/no): ").strip().lower()
+        if playAgain not in ["yes", "y"]:
+            print("Thanks for playing! Goodbye.")
             break
-
-        if not solveRiddle(riddle, riddleManager, phraseRevealer):
-            break
-
-    # Guess the secret phrase
-    print("All riddles answered! Now, guess the secret phrase.")
-    guessCount = 5
-    while guessCount > 0:
-        guess = input("Your guess: ").strip().lower()
-        if phraseRevealer.checkPhrase(guess):
-            print("Congratulations, you've won!")
-            return
-        else:
-            guessCount -= 1
-            print(f"Incorrect guess {guessCount} guesses left.")
-
-    print("Game Over. The secret phrase was:", phraseRevealer.secretPhrase)
 
 def getValidTopicInput(topics):
     topic = None
@@ -69,6 +82,26 @@ def solveRiddle(riddle, riddleManager, phraseRevealer):
     print("No more attempts for this riddle.")
     print(f"The correct answer was {riddle['answer'].strip().upper()}")
     return False
+
+def saveLeaderBoard(playerName, time):
+    leaderBoardFile = "leader_board.txt"
+    leaderboard = []
+    try:
+        with open(leaderBoardFile, "r") as file:
+            for line in file:
+                name, playerTime = line.strip().split(",")
+                leaderboard.append((name, float(playerTime)))
+    except FileNotFoundError:
+        pass
+
+    leaderboard.append((playerName,time))
+    leaderboard.sort(key=lambda x:x[1])
+
+    try:
+        with open(leaderBoardFile, "w") as file:
+            file.write(f"{playerName}, {time:.2f}\n")
+    except Exception as e:
+        print("Error updating leaderboard", str(e))
 
 def loadThemes():
     themesPath = os.path.join(os.path.dirname(__file__), "themes", "themes.json")
