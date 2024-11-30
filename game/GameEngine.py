@@ -6,6 +6,7 @@ import time
 
 def runGame():
     while True:
+        stateRules()
         # Load topics
         topics = loadThemes()
 
@@ -53,6 +54,15 @@ def runGame():
             print("Thanks for playing! Goodbye.")
             break
 
+def stateRules():
+    print(
+'''
+This game asks you to choose a topic. 
+You will answer 5 riddles for this topic. 
+You have 3 guesses each riddle. 
+Each correct answer will reveal a letter in a secret phrase.
+After all riddles have been answered you will have 5 guesses to figure out the secret phrase.
+''')
 def getValidTopicInput(topics):
     topic = None
     while topic not in topics:
